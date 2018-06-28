@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NJsonSchema;
+using NSwag.AspNetCore;
 using TodoApi.Models;
 
 namespace TodoApi
@@ -42,6 +45,14 @@ namespace TodoApi
             {
                 app.UseHsts();
             }
+            
+            app.UseSwaggerUi(typeof(Startup).GetTypeInfo().Assembly, settings =>
+            {
+                settings.GeneratorSettings.DefaultPropertyNameHandling = 
+                    PropertyNameHandling.CamelCase;
+
+                settings.GeneratorSettings.Title = "Todo REST API";
+            });
 
             app.UseMvc();
         }
