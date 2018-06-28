@@ -25,14 +25,14 @@ namespace TodoApi
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            var dbConnection = String.Format("Data Source={0},{1};Database={2};User Id={3};Password={4};",
+            var dbConnection = String.Format("Host={0};Port={1};Database={2};User ID={3};Password={4};",
                 Configuration["DbConnection:Host"],
                 Configuration["DbConnection:Port"],
                 Configuration["DbConnection:Db"],
                 Configuration["DbConnection:Username"],
                 Configuration["DbConnection:Password"]);
             
-            services.AddDbContext<TodoContext>(opt => opt.UseSqlServer(dbConnection));
+            services.AddDbContext<TodoContext>(opt => opt.UseNpgsql(dbConnection));
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

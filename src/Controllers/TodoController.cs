@@ -38,7 +38,9 @@ namespace TodoApi.Controllers
                 ticker = await response.Content.ReadAsAsync<Ticker>();
             }*/
             
-            return _context.TodoItems.ToList();
+            return _context.TodoItems
+                .OrderBy(t => t.Id)
+                .ToList();
         }
 
         [HttpGet("{id}", Name = "GetTodo")]
