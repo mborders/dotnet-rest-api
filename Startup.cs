@@ -29,8 +29,7 @@ namespace TodoApi
                 Configuration["DbConnection:Username"],
                 Configuration["DbConnection:Password"]);
             
-            services.AddDbContext<TodoContext>(opt => 
-                opt.UseSqlServer("Data Source=mssql,1433;Database=todo;User Id=sa;Password=Password1;"));
+            services.AddDbContext<TodoContext>(opt => opt.UseSqlServer(dbConnection));
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
