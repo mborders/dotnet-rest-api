@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using TodoApi.Models;
 
 namespace TodoApi.Controllers
@@ -27,18 +28,8 @@ namespace TodoApi.Controllers
         [HttpGet]
         public ActionResult<List<TodoItem>> GetAll()
         {
-            /*HttpClient client = new HttpClient();
-            HttpResponseMessage response = await client.GetAsync(
-                "https://api.coinmarketcap.com/v2/ticker/1/");
-
-            Ticker ticker = null;
-            
-            if (response.IsSuccessStatusCode)
-            {
-                ticker = await response.Content.ReadAsAsync<Ticker>();
-            }*/
-            
             return _context.TodoItems
+                .Include(t => t.Category)
                 .OrderBy(t => t.Id)
                 .ToList();
         }
@@ -55,7 +46,7 @@ namespace TodoApi.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(TodoItem item)
+        public IActionResult Create([FromBody] TodoItem item)
         {
             _context.TodoItems.Add(item);
             _context.SaveChanges();
@@ -64,7 +55,7 @@ namespace TodoApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(long id, TodoItem item)
+        public IActionResult Update(long id, [FromBody] TodoItem item)
         {
             var todo = _context.TodoItems.Find(id);
             if (todo == null)
@@ -74,6 +65,7 @@ namespace TodoApi.Controllers
 
             todo.IsComplete = item.IsComplete;
             todo.Name = item.Name;
+            todo.Category = item.Category;
 
             _context.TodoItems.Update(todo);
             _context.SaveChanges();
